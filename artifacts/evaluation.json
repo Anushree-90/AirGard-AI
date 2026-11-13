@@ -1,0 +1,101 @@
+{
+  "model_name": "HistGradientBoostingRegressor (persistence residual)",
+  "prediction_mode": "persistence_residual",
+  "residual_scale": 0.1,
+  "target": "Open-Meteo CAMS US AQI",
+  "features": [
+    "aqi_lag_0",
+    "aqi_lag_1",
+    "aqi_lag_2",
+    "aqi_lag_3",
+    "aqi_lag_6",
+    "aqi_lag_12",
+    "aqi_lag_24",
+    "aqi_lag_48",
+    "aqi_lag_72",
+    "aqi_lag_168",
+    "pm25_lag_0",
+    "pm25_lag_1",
+    "pm25_lag_2",
+    "pm25_lag_3",
+    "pm25_lag_6",
+    "pm25_lag_12",
+    "pm25_lag_24",
+    "pm25_lag_48",
+    "pm25_lag_72",
+    "pm25_lag_168",
+    "aqi_mean_6",
+    "aqi_mean_24",
+    "aqi_mean_72",
+    "aqi_mean_168",
+    "pm25_mean_6",
+    "pm25_mean_24",
+    "pm25_mean_72",
+    "pm25_mean_168",
+    "aqi_std_24",
+    "aqi_std_168",
+    "pm25_std_24",
+    "pm25_std_168",
+    "horizon",
+    "target_hour_sin",
+    "target_hour_cos",
+    "target_weekday_sin",
+    "target_weekday_cos",
+    "target_dayofyear_sin",
+    "target_dayofyear_cos"
+  ],
+  "forecast_horizon_hours": 24,
+  "history_records": 2208,
+  "history_start_utc": "2026-08-13T00:00:00",
+  "history_end_utc": "2026-11-12T23:00:00",
+  "training_location": {
+    "latitude": 26.800003,
+    "longitude": 80.899994,
+    "timezone": "GMT"
+  },
+  "training_source": "Open-Meteo Air Quality API, CAMS hourly model estimates",
+  "evaluation": {
+    "split": "chronological 80/20; test origins spaced 24 hours apart",
+    "selection": "chronological validation within the first 80%; test period used only for final evaluation",
+    "split_time_utc": "2026-10-25T14:00:00",
+    "validation_split_time_utc": "2026-10-16T09:00:00",
+    "test_forecast_origin_start_utc": "2026-10-25T14:00:00",
+    "test_forecast_origin_end_utc": "2026-11-11T14:00:00",
+    "test_period_start_utc": "2026-10-25T15:00:00",
+    "test_period_end_utc": "2026-11-12T14:00:00",
+    "archive_end_utc": "2026-11-12T23:00:00",
+    "validation": {
+      "direct": {
+        "mae": 18.20418704928081,
+        "rmse": 20.58375240260958
+      },
+      "selected_residual_scale": 0.1,
+      "selected_mode": "persistence_residual",
+      "selected": {
+        "mae": 9.229431240285109,
+        "rmse": 14.536937625114398
+      }
+    },
+    "training_examples": 38052,
+    "test_examples": 432,
+    "test_forecast_origins": 18,
+    "selected_model": "HistGradientBoostingRegressor",
+    "selected_mode": "persistence_residual",
+    "beats_persistence_on_both_metrics": true,
+    "models": {
+      "selected": {
+        "mae": 13.70520326865392,
+        "rmse": 20.28764927228746
+      },
+      "persistence_last_aqi": {
+        "mae": 14.166666666666666,
+        "rmse": 20.83188883881134
+      },
+      "seasonal_naive_previous_day_same_hour": {
+        "mae": 20.89814814814815,
+        "rmse": 28.240288399534606
+      }
+    },
+    "residual_scale": 0.1
+  }
+}

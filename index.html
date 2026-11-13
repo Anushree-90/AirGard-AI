@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111e">
+  <meta name="description" content="AirGuard AI air-quality dashboard using Open-Meteo CAMS model estimates, not local sensor readings.">
+  <title>AirGuard AI | Air quality intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#overview" aria-label="AirGuard AI home">
+        <span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.5 26.8 9.7v12.6L16 28.5 5.2 22.3V9.7L16 3.5Z"/><path d="M10 19.8c1.9-4.1 3.9-7.5 6-10.2.2 4.6 1.7 7.1 5.1 7.8-2.8 3.1-6.5 4-11.1 2.4Z"/></svg></span>
+        <span class="brand-name">airguard<span>AI</span></span>
+      </a>
+
+      <div class="workspace-label" data-i18n="workspace">WORKSPACE</div>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a class="nav-link active" href="#overview" data-section="overview"><span class="nav-icon">◫</span><span data-i18n="overview">Overview</span><span class="nav-indicator"></span></a>
+        <a class="nav-link" href="#live-aqi" data-section="live-aqi"><span class="nav-icon">◉</span><span data-i18n="liveAqi">Live AQI</span><span class="nav-indicator"></span></a>
+        <a class="nav-link" href="#forecast" data-section="forecast"><span class="nav-icon">⌁</span><span data-dashboard-label="forecastNav">AQI forecast</span><span class="nav-indicator"></span></a>
+        <a class="nav-link" href="#pollution-map" data-section="pollution-map"><span class="nav-icon">⌖</span><span data-i18n="pollutionMap">Pollution Map</span><span class="nav-indicator"></span></a>
+        <a class="nav-link" href="#health-alerts" data-section="health-alerts"><span class="nav-icon">♡</span><span data-i18n="healthAlerts">Health Alerts</span><span class="nav-indicator"></span></a>
+        <a class="nav-link" href="#voice-assistant" data-section="voice-assistant"><span class="nav-icon">◖</span><span data-i18n="voiceAssistant">Voice Assistant</span><span class="nav-indicator"></span></a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="model-status"><span class="pulse-dot"></span><div><strong data-dashboard-label="modelDashboard">CAMS model data</strong><small data-dashboard-label="liveAqiSource">Live AQI: Open-Meteo</small></div><span class="status-check" data-dashboard-label="modelStatus">MODEL</span></div>
+        <div class="profile"><div class="avatar">AN</div><div class="profile-copy"><strong>Anushree</strong><small data-i18n="personalWorkspace">Personal workspace</small></div><button class="icon-button profile-menu" aria-label="Profile options" title="Profile options">···</button></div>
+      </div>
+    </aside>
+
+    <main class="main-content" id="overview">
+      <header class="topbar">
+        <button class="icon-button menu-button" id="menu-toggle" aria-label="Open navigation" title="Open navigation">☰</button>
+        <div class="breadcrumb"><span data-i18n="airIntelligence">Air intelligence</span><span class="crumb-slash">/</span><strong data-i18n="overview">Overview</strong></div>
+        <div class="top-actions">
+          <div class="demo-chip status-loading" id="air-data-status" role="status" aria-live="polite"><span></span><span id="air-data-status-text">Loading air quality…</span></div>
+          <div class="language-switch" role="group" aria-label="Language">
+            <button class="language-option selected" data-lang="en" aria-pressed="true">EN</button>
+            <span class="language-divider">/</span>
+            <button class="language-option" data-lang="hi" aria-pressed="false">हि</button>
+          </div>
+          <button class="icon-button notification-button" aria-label="Notifications" title="Notifications"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><i></i></button>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <section class="page-heading">
+          <div><p class="eyebrow" data-i18n="wednesdayNov">WEDNESDAY, NOVEMBER 11</p><h1><span id="dashboard-greeting"></span> <span class="wave">✳</span></h1><p class="subtitle" data-i18n="airSnapshot">Here’s your air quality snapshot for today.</p></div>
+          <button class="location-picker" id="location-picker" title="Use your current location"><span class="location-pin">⌖</span><span><strong id="air-location-name">Lucknow</strong><small id="air-location-coordinates">Loading coordinates…</small></span><span class="chevron">⌄</span></button>
+        </section>
+
+        <section class="overview-grid" aria-label="Current air quality overview">
+          <article class="panel aqi-panel" id="live-aqi">
+            <div class="panel-heading"><div><p class="panel-kicker" data-i18n="airQualityIndex">AIR QUALITY INDEX</p><h2 data-i18n="currentAqi">Current AQI</h2></div><button class="more-button" aria-label="AQI options">···</button></div>
+            <div class="aqi-content">
+              <div class="gauge-wrap">
+                <svg class="aqi-gauge" viewBox="0 0 220 145" role="img" aria-label="Current US AQI loading">
+                  <defs><linearGradient id="gaugeGradient" x1="0" x2="1"><stop offset="0%" stop-color="#50d5b3"/><stop offset="52%" stop-color="#e8cb72"/><stop offset="100%" stop-color="#ff816e"/></linearGradient></defs>
+                  <path class="gauge-track" d="M25 121a85 85 0 0 1 170 0"/>
+                  <path class="gauge-fill" d="M25 121a85 85 0 0 1 170 0"/>
+                  <text x="110" y="91" class="gauge-value" id="aqi-value">--</text><text x="110" y="116" class="gauge-caption" data-i18n="usAqi">US AQI</text>
+                </svg>
+                <span class="gauge-state"><span></span><span id="aqi-category">Waiting for live data</span></span>
+              </div>
+              <div class="aqi-details"><p id="aqi-description">Loading current AQI from Open-Meteo…</p><div class="aqi-scale"><div class="scale-bar"><i id="aqi-scale-indicator"></i></div><div class="scale-labels"><span data-i18n="good">Good</span><span data-i18n="moderate">Moderate</span><span data-i18n="poor">Poor</span><span data-i18n="severe">Severe</span></div></div></div>
+            </div>
+            <div class="panel-foot"><span class="live-indicator"><i></i><span id="aqi-updated">Waiting for live data</span></span><a id="aqi-source" href="https://open-meteo.com/en/docs/air-quality-api" target="_blank" rel="noopener noreferrer">Source: Open-Meteo CAMS model</a><button class="text-button" id="refresh-air-data" type="button">Refresh</button></div>
+          </article>
+
+          <article class="panel weather-panel">
+            <div class="panel-heading"><div><p class="panel-kicker" data-i18n="localConditions">LOCAL CONDITIONS</p><h2 data-i18n="weather">Weather</h2></div><span class="weather-time status-loading" id="weather-status" role="status" aria-live="polite">Loading weather…</span></div>
+            <div class="weather-main"><div class="weather-symbol" data-condition="unknown" aria-hidden="true"><span class="sun-core"></span><span class="sun-ray ray-one"></span><span class="sun-ray ray-two"></span><span class="sun-ray ray-three"></span><span class="sun-ray ray-four"></span><span class="cloud-shape"></span></div><div class="temperature"><span id="weather-temperature">--</span><span>°</span><small>C</small><p id="weather-condition">Loading weather…</p></div></div>
+            <div class="weather-metrics"><div><span class="metric-icon">⌁</span><small data-i18n="humidity">Humidity</small><strong><span id="weather-humidity">--</span><span>%</span></strong></div><div><span class="metric-icon wind-icon">≋</span><small data-i18n="windSpeed">Wind speed</small><strong><span id="weather-wind">--</span> <span>km/h</span></strong></div><div><span class="metric-icon">◉</span><small data-i18n="visibility">Visibility</small><strong><span id="weather-visibility">--</span> <span>km</span></strong></div></div>
+          </article>
+        </section>
+
+        <section class="pollutant-section" aria-labelledby="pollutant-title">
+          <div class="section-heading compact-heading"><div><p class="panel-kicker" data-i18n="whatYouBreathe">WHAT YOU BREATHE</p><h2 id="pollutant-title" data-i18n="pollutantLevels">Pollutant levels</h2></div><span class="units-note" data-dashboard-label="pollutantSource">CAMS model estimates · not sensor readings</span></div>
+          <div class="pollutant-grid">
+            <article class="pollutant-card" data-pollutant="pm2_5" data-scale-max="100"><div class="pollutant-top"><span class="pollutant-symbol pm-symbol">PM<sub>2.5</sub></span><span class="pollutant-status status-unavailable">--</span></div><strong class="pollutant-value" id="pollutant-pm2_5">--</strong><div class="pollutant-bottom"><span data-i18n="fineParticles">Fine particles</span></div><div class="pollutant-bar"><i></i></div></article>
+            <article class="pollutant-card" data-pollutant="pm10" data-scale-max="150"><div class="pollutant-top"><span class="pollutant-symbol pm-symbol">PM<sub>10</sub></span><span class="pollutant-status status-unavailable">--</span></div><strong class="pollutant-value" id="pollutant-pm10">--</strong><div class="pollutant-bottom"><span data-i18n="coarseParticles">Coarse particles</span></div><div class="pollutant-bar"><i></i></div></article>
+            <article class="pollutant-card" data-pollutant="nitrogen_dioxide" data-scale-max="100"><div class="pollutant-top"><span class="pollutant-symbol gas-symbol">NO<sub>2</sub></span><span class="pollutant-status status-unavailable">--</span></div><strong class="pollutant-value" id="pollutant-nitrogen_dioxide">--</strong><div class="pollutant-bottom"><span data-i18n="nitrogenDioxide">Nitrogen dioxide</span></div><div class="pollutant-bar"><i></i></div></article>
+            <article class="pollutant-card" data-pollutant="ozone" data-scale-max="120"><div class="pollutant-top"><span class="pollutant-symbol gas-symbol">O<sub>3</sub></span><span class="pollutant-status status-unavailable">--</span></div><strong class="pollutant-value" id="pollutant-ozone">--</strong><div class="pollutant-bottom"><span data-i18n="ozone">Ozone</span></div><div class="pollutant-bar"><i></i></div></article>
+          </div>
+        </section>
+
+        <section class="analytics-grid">
+          <article class="panel trend-panel">
+            <div class="panel-heading chart-heading"><div><p class="panel-kicker"><span data-i18n="airQualityTrends">AIR QUALITY TRENDS</span> · <span data-dashboard-label="trendModelSource">CAMS MODEL ARCHIVE · NOT OBSERVATIONS</span></p><h2 data-i18n="pollutionTrend">Pollution trend</h2></div><div class="chart-controls" role="group" aria-label="Chart period"><button class="range-button" data-range="24h" data-i18n="24hours">24 hours</button><button class="range-button active" data-range="7d" data-i18n="7days">7 days</button><button class="range-button" data-range="30d" data-i18n="30days">30 days</button></div></div>
+            <div class="chart-legend"><span><i class="legend-dot dot-aqi"></i><span data-i18n="aqiLabel">US AQI</span> (left)</span><span><i class="legend-dot dot-pm"></i>PM<sub>2.5</sub> (right)</span><span class="chart-caption" id="trend-resolution"></span><span class="chart-caption panel-data-status" id="trend-status" role="status" aria-live="polite">Loading air-quality history…</span></div>
+            <div class="trend-chart-wrap"><canvas id="trend-chart" role="img" aria-label="CAMS model AQI and PM2.5 history chart" hidden></canvas><p class="panel-data-message" id="trend-message" role="status" aria-live="polite" hidden></p></div>
+            <p class="panel-time-range" id="trend-window"></p>
+          </article>
+
+          <article class="panel map-panel" id="pollution-map">
+            <div class="panel-heading"><div><p class="panel-kicker"><span data-i18n="cityOverview">CITY OVERVIEW</span> · <span data-dashboard-label="mapModel">CAMS MODEL ESTIMATES</span></p><h2 data-i18n="pollutionMap">Pollution map</h2></div><button class="map-expand" aria-label="Expand map" title="Expand map">⛶</button></div>
+            <div class="map-visual" id="aqi-map" role="group" aria-label="Loading CAMS model grid estimates">
+              <div class="map-grid"></div><div class="map-points" id="map-points" aria-live="polite"></div>
+              <div class="map-scale"><span data-dashboard-label="lowerAqi">Lower AQI</span><i></i><span data-dashboard-label="higherAqi">Higher AQI</span></div><span class="map-status status-loading" id="map-status" role="status" aria-live="polite">Loading model grid…</span>
+            </div>
+            <div class="map-footer"><span><i class="legend-dot dot-aqi"></i><span id="map-location-label">Lucknow</span></span><a id="map-source-note" href="https://open-meteo.com/en/docs/air-quality-api" target="_blank" rel="noopener noreferrer">MODEL ESTIMATES · NOT STATIONS</a></div>
+          </article>
+        </section>
+
+        <section class="lower-grid">
+          <article class="panel forecast-panel" id="forecast">
+            <div class="panel-heading"><div><p class="panel-kicker" data-dashboard-label="forecastModelSource">CAMS MODEL FORECAST · NOT OBSERVATIONS</p><h2 data-i18n="24hourForecast">24-hour forecast</h2></div><span class="forecast-status status-loading" id="forecast-status" role="status" aria-live="polite">Loading model forecast…</span></div>
+            <div class="forecast-chart" id="forecast-chart" aria-label="Forecast AQI for the next 24 hours"></div>
+            <div class="forecast-note"><span class="forecast-spark">✳</span><span id="forecast-note">Forecasts are model estimates, not verified observations.</span></div>
+            <section class="ml-forecast-section" aria-labelledby="ml-forecast-heading">
+              <div class="panel-heading"><div><p class="panel-kicker" data-dashboard-label="customMlSource">CUSTOM ML MODEL · CAMS-TRAINED</p><h3 id="ml-forecast-heading" data-dashboard-label="customMlHeading">AirGuard ML predictions</h3></div><span class="forecast-status status-loading" id="ml-forecast-status" role="status" aria-live="polite">Checking local ML service…</span></div>
+              <div class="forecast-chart" id="ml-forecast-chart" aria-label="Custom ML AQI predictions for the next 24 hours"></div>
+              <p class="ml-forecast-metrics" id="ml-forecast-metrics"></p>
+              <div class="forecast-note"><span class="forecast-spark">✳</span><span data-dashboard-label="customMlNote">Separate machine-learning predictions from the local service; trained and evaluated against CAMS model estimates, not ground-station observations.</span></div>
+            </section>
+          </article>
+          <article class="panel alerts-panel" id="health-alerts">
+            <div class="panel-heading"><div><p class="panel-kicker" data-dashboard-label="alertSource">AQI threshold alerts · US EPA categories</p><h2><span data-i18n="smartAlerts">Smart alerts</span> <span class="alert-count">—</span></h2></div><span class="alert-status status-loading" id="alerts-status" role="status" aria-live="polite">Waiting for current AQI…</span></div>
+            <div class="alert-list" id="alert-list" aria-live="polite">Waiting for current AQI to evaluate thresholds.</div>
+            <div class="alert-reference"><span id="alert-reference-text">AQI bands from the US EPA.</span> <a href="https://www.airnow.gov/aqi/aqi-basics/" target="_blank" rel="noopener noreferrer">US EPA AQI basics</a></div>
+            <div class="all-clear" id="all-clear" hidden><span>✓</span><span data-i18n="allCaughtUp">You’re all caught up.</span></div>
+          </article>
+        </section>
+
+        <section class="assistant-panel panel" id="voice-assistant">
+          <div class="assistant-orbit"><div class="orbit-ring ring-a"></div><div class="orbit-ring ring-b"></div><span>✳</span></div>
+          <div class="assistant-copy"><p class="panel-kicker" data-i18n="airguardAssistant">AIRGUARD ASSISTANT</p><h2 data-i18n="askAboutAir">Ask about the air around you</h2><p data-i18n="assistantHint">Try “Should I go for a run?” or “Aaj pollution kaisa hai?”</p></div>
+          <button class="mic-button" id="mic-button" aria-label="Start voice assistant" title="Start voice assistant"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3m-4 0h8"/></svg><span data-i18n="tapToSpeak">Tap to speak</span></button>
+          <button class="text-button" id="speech-test-button" type="button">Test voice</button>
+          <form class="assistant-input-form" id="assistant-input-form">
+            <input id="assistant-question" type="text" aria-label="Ask the AirGuard assistant" placeholder="Type a question if voice recognition is unavailable" autocomplete="off">
+            <button class="assistant-ask-button" id="assistant-ask-button" type="submit">Ask</button>
+          </form>
+          <div class="assistant-response" id="assistant-response" aria-live="polite" hidden><span class="assistant-response-status" id="assistant-response-status"></span><span class="response-spark">✳</span><span id="assistant-response-text"></span><button class="response-close" aria-label="Close response">×</button></div>
+        </section>
+
+        <footer class="page-footer"><span data-dashboard-label="dataDisclaimer">API-backed model estimates · not local sensor readings</span><span>AirGuard AI <i>·</i> <span data-i18n="madeForCleanerAir">Made for cleaner air</span></span></footer>
+      </div>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

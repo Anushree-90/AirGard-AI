@@ -165,6 +165,14 @@ function updateGreeting() {
   greeting.textContent = t(greetingKey);
 }
 
+function updateDate() {
+  document.querySelector(".page-heading .eyebrow").textContent = new Intl.DateTimeFormat(currentLanguage === "hi" ? "hi-IN" : "en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric"
+  }).format(new Date());
+}
+
 function setLanguage(language) {
   currentLanguage = language;
   document.documentElement.lang = language;
@@ -178,11 +186,7 @@ function setLanguage(language) {
     const key = element.dataset.dashboardLabel;
     if (dashboardLabels[language][key]) element.textContent = dashboardLabels[language][key];
   });
-  document.querySelector(".page-heading .eyebrow").textContent = new Intl.DateTimeFormat(language === "hi" ? "hi-IN" : "en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric"
-  }).format(new Date());
+  updateDate();
   document.querySelectorAll(".language-option").forEach((button) => {
     const selected = button.dataset.lang === language;
     button.classList.toggle("selected", selected);
@@ -1520,6 +1524,7 @@ if ("IntersectionObserver" in window) {
   document.querySelectorAll(".main-content > .page-content > section[id]").forEach((section) => observer.observe(section));
 }
 updateGreeting();
+updateDate();
 renderForecast();
 renderChart(currentRange);
 loadSpeechVoices();
